@@ -14,3 +14,13 @@
     height: 70vh; 
     background-color: lightblue;
 }
+.question{
+    display: flex;
+    height: 20vh;
+    width: 100%;
+    background-color: blue;
+    border: none;
+    border-radius: 2vh;
+    align-items: center;
+    justify-content: center;
+}
