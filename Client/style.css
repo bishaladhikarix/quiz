@@ -70,6 +70,7 @@ body{
     justify-content: center;
     align-items: center;
     font-size: 4vh;
+
 }
 
 .option-c,.option-d{
@@ -84,7 +85,8 @@ body{
     font-size: 4vh;
 }
 .option-a:hover,.option-b:hover,.option-c:hover,.option-d:hover{
-    background-color: aliceblue;
+    
+    cursor: pointer;
 }
 
 
@@ -134,4 +136,14 @@ body{
 }
 .submit:hover{
     background-color: rgb(11, 186, 244);
+}
+
+.score-result{
+    height: 5vh;
+    width: 5vw;
+    background-color: aliceblue;
+    position: absolute;
+    top: 94%;
+    left:50%;
+    transform: translate(-50%, -50%);
 }
