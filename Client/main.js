@@ -41,7 +41,7 @@ const assignAnswers = (answers)=>{
 }
 //function to check the answer whether it is correct or incorrect;
 const checkAnswers = (ans)=>{
-
+    console.log(ans)
 }
 
 //takes responsibility for passing the data to related functions;
@@ -83,7 +83,7 @@ const toggleOption = (option,index,selectedAnswers) => {
     fourthAns = selectedAnswers[3];
    
 }
-
+//Fetching data
 const data = async ()=>{
     
 
