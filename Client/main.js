@@ -16,6 +16,35 @@ let thirdAns = false;
 let fourthAns = false;
 
 
+//Fetching data
+const data = async ()=>{
+    
+
+    try{
+        let response = await(fetch(URL));
+        let res = await response.json();
+        let question = res[0].question;
+        let answers = res[0].answers;
+        let correctAns = res[0].correct_answers;
+        
+        assignValues(question,answers,correctAns);
+        click();
+
+    }catch(e){
+        console.log("Unable to fetch the data due to some unfotunate circumstances" , e);
+    }
+    
+
+}
+
+//takes responsibility for passing the data to related functions;
+const assignValues = (question,answers,correctAns)=>{
+    assignQuestion(question);
+    assignAnswers(answers);
+    checkAnswers(correctAns);
+    
+}
+
 //assign question to questoin field
 const assignQuestion = (question)=>{
     questionContainer.innerText = question;
@@ -39,17 +68,9 @@ const assignAnswers = (answers)=>{
     optionThree.innerText = 'C) ' + optionC;
     optionFour.innerText = 'D) ' + optionD;
 }
-//function to check the answer whether it is correct or incorrect;
-const checkAnswers = (ans)=>{
-    console.log(ans)
-}
 
-//takes responsibility for passing the data to related functions;
-const assignValues = (question,answers,correctAns)=>{
-    assignQuestion(question);
-    assignAnswers(answers);
-    checkAnswers(correctAns);
-}
+
+//pass the individual  option available to the toogle functoin; 
 const click = () => {
     // const firstOption = document.querySelector('.option-a');
     // const secondOption = document.querySelector('.option-b');
@@ -66,6 +87,7 @@ const click = () => {
             
         })
     })
+    
 
 }
 //Toogles background color to indicate which options are selected
@@ -83,28 +105,41 @@ const toggleOption = (option,index,selectedAnswers) => {
     fourthAns = selectedAnswers[3];
    
 }
-//Fetching data
-const data = async ()=>{
-    
 
-    try{
-        let response = await(fetch(URL));
-        let res = await response.json();
-        let question = res[0].question;
-        let answers = res[0].answers;
-        let multipleCorrectAns = res[0].multiple_correct_answers;
-        let correctAns = res[0].correct_answer;
-        
-        assignValues(question,answers,correctAns);
-        click();
+//function to check the answer whether it is correct or incorrect;
+const checkAnswers = (ans)=>{
+    const score = document.querySelector('.score');
+    const result = document.querySelector('.result');
+    const userInput = [firstAns,secondAns,thirdAns,fourthAns];
+    const answers = [ans.answer_a_correct , ans.answer_b_correct , ans.answer_c_correct , ans.answer_d_correct];
 
-    }catch(e){
-        console.log("Unable to fetch the data due to some unfotunate circumstances" , e);
-    }
-    
+    let scoreValue = 0;
+    score.innerText = scoreValue;
+
+    userInput.forEach((input)=>{
+        answers.forEach((ans)=>{
+
+            let checkUsr = 0; // get increment according to number of userSelected optoins;
+            let checkAns = 0;// get increment according to number of correct answer;
+
+            if(input == true){
+                checkUsr++;
+            }
+
+            if(ans == true){
+                checkAns++;
+            }
+
+            if(checkUsr === checkAns){
+                scoreValue++;
+                result.innerText = "Correct";
+            }else{
+                result.innerText = "Incorrect";
+            }
+        })
+    })
 
 }
-
 
 
 data();
