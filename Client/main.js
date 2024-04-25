@@ -1,7 +1,7 @@
 //frontend varaibles
 const questionContainer = document.querySelector('.question');
 const ansContainer = document.querySelector('.answer');
-
+const submitBtn = document.querySelector('.submit');
 
 //Api's shits
 const apiKey = 'FVqReQUHGBzu36QQdfmzINPK9WwXCmgN9ISRpJM3';
@@ -28,7 +28,7 @@ const data = async ()=>{
         let correctAns = res[0].correct_answers;
         
         assignValues(question,answers,correctAns);
-        click();
+        optionClick();//checks what user selected
 
     }catch(e){
         console.log("Unable to fetch the data due to some unfotunate circumstances" , e);
@@ -41,7 +41,7 @@ const data = async ()=>{
 const assignValues = (question,answers,correctAns)=>{
     assignQuestion(question);
     assignAnswers(answers);
-    checkAnswers(correctAns);
+    submitClick(()=> checkAnswers(correctAns));
     
 }
 
@@ -71,7 +71,7 @@ const assignAnswers = (answers)=>{
 
 
 //pass the individual  option available to the toogle functoin; 
-const click = () => {
+const optionClick = () => {
     // const firstOption = document.querySelector('.option-a');
     // const secondOption = document.querySelector('.option-b');
     // const thirdOption = document.querySelector('.option-c');
@@ -87,8 +87,6 @@ const click = () => {
             
         })
     })
-    
-
 }
 //Toogles background color to indicate which options are selected
 //and toogles the boolean varaible if it is selected.
@@ -107,40 +105,66 @@ const toggleOption = (option,index,selectedAnswers) => {
 }
 
 //function to check the answer whether it is correct or incorrect;
-const checkAnswers = (ans)=>{
-    const score = document.querySelector('.score');
+const checkAnswers = (correctAns)=>{
+    // const score = document.querySelector('.player-score');
+    // const result = document.querySelector('.result');
+    // const userInput = [firstAns,secondAns,thirdAns,fourthAns];
+    // const answers = [ans.answer_a_correct , ans.answer_b_correct , ans.answer_c_correct , ans.answer_d_correct];
+
+    // let scoreValue = 0;
+    // score.innerText = 'Score: '+ scoreValue;
+
+    // let checkUsr = 0; // get increment according to number of userSelected optoins;
+    // let checkAns = 0;// get increment according to number of correct answer;
+
+    // userInput.forEach((input)=>{      
+    //          if(input === true){
+    //             checkUsr++;
+    //         }
+    // })
+    // answers.forEach((ans)=>{
+    //     if(ans === true){
+    //         checkAns++;
+    //     }
+    // })
+
+    // if(checkUsr === checkAns){
+    //     scoreValue++;
+    //     result.innerText = "Correct";
+        
+    // }else{
+    //     result.innerText = "Incorrect";
+        
+    // }
+    const score = document.querySelector('.player-score');
     const result = document.querySelector('.result');
-    const userInput = [firstAns,secondAns,thirdAns,fourthAns];
-    const answers = [ans.answer_a_correct , ans.answer_b_correct , ans.answer_c_correct , ans.answer_d_correct];
+    const userInput = [firstAns, secondAns, thirdAns, fourthAns];
+    const answers = [correctAns.answer_a_correct, correctAns.answer_b_correct, correctAns.answer_c_correct, correctAns.answer_d_correct];
 
     let scoreValue = 0;
-    score.innerText = scoreValue;
 
-    userInput.forEach((input)=>{
-        answers.forEach((ans)=>{
+    userInput.forEach((input, index) => {
+        if (input === answers[index]) {
+            scoreValue++;
+        }
+    });
 
-            let checkUsr = 0; // get increment according to number of userSelected optoins;
-            let checkAns = 0;// get increment according to number of correct answer;
+    score.innerText = 'Score: ' + scoreValue;
+    result.innerText = (scoreValue === 4) ? "Correct" : "Incorrect";
+    data();
+}
 
-            if(input == true){
-                checkUsr++;
-            }
 
-            if(ans == true){
-                checkAns++;
-            }
-
-            if(checkUsr === checkAns){
-                scoreValue++;
-                result.innerText = "Correct";
-            }else{
-                result.innerText = "Incorrect";
-            }
-        })
-    })
-
+const submitClick = (something)=>{
+    submitBtn.addEventListener('click',something);
 }
 
 
 data();
+
+
+
+
+
+
 
