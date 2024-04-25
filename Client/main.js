@@ -50,32 +50,14 @@ const assignValues = (question,answers,correctAns)=>{
     assignAnswers(answers);
     checkAnswers(correctAns);
 }
-
-const checkAnswer = ()=>{
-    if(firstAns){
-        console.log("first answer has been changed");
-
-    }
-    if(secondAns){
-        console.log("second answer has been changed");
-
-    }
-    if(thirdAns){
-        console.log("thrid answer has been changed");
-
-    }
-    if(fourthAns){
-        console.log("fourht answer has been changed");
-    }
-}
-
 const click = () => {
-    const firstOption = document.querySelector('.option-a');
-    const secondOption = document.querySelector('.option-b');
-    const thirdOption = document.querySelector('.option-c');
-    const fourthOption = document.querySelector('.option-d');
+    // const firstOption = document.querySelector('.option-a');
+    // const secondOption = document.querySelector('.option-b');
+    // const thirdOption = document.querySelector('.option-c');
+    // const fourthOption = document.querySelector('.option-d');
 
-    const allOption = [firstOption,secondOption,thirdOption,fourthOption];
+    // const allOption = [firstOption,secondOption,thirdOption,fourthOption];
+    const allOption = document.querySelectorAll('#opt');
     const selectedAnswers = [firstAns,secondAns,thirdAns,fourthAns];
 
     allOption.forEach((option,index)=>{
@@ -86,7 +68,8 @@ const click = () => {
     })
 
 }
-
+//Toogles background color to indicate which options are selected
+//and toogles the boolean varaible if it is selected.
 const toggleOption = (option,index,selectedAnswers) => {
     selectedAnswers[index] = !selectedAnswers[index];
     if(selectedAnswers[index]){
@@ -98,7 +81,7 @@ const toggleOption = (option,index,selectedAnswers) => {
     secondAns = selectedAnswers[1];
     thirdAns = selectedAnswers[2];
     fourthAns = selectedAnswers[3];
-    checkAnswer();
+   
 }
 
 const data = async ()=>{
