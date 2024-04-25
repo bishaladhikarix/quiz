@@ -69,57 +69,36 @@ const checkAnswer = ()=>{
     }
 }
 
-const click = ()=>{
-
+const click = () => {
     const firstOption = document.querySelector('.option-a');
-    const secondOption = document.querySelector('.option-a');
-    const thirdOption = document.querySelector('.option-a');
-    const fourthOption = document.querySelector('.option-a');
+    const secondOption = document.querySelector('.option-b');
+    const thirdOption = document.querySelector('.option-c');
+    const fourthOption = document.querySelector('.option-d');
 
-    firstOption.addEventListener('click',()=>{
-        if(firstOption.style.backgroundColor === 'blue'){
-            firstOption.style.backgroundColor = 'aliceblue'
-            firstAns = !firstAns;
-        }else{
-            firstOption.style.backgroundColor = 'blue';
-            firstAns = !firstAns;
-        }
+    const allOption = [firstOption,secondOption,thirdOption,fourthOption];
+    const selectedAnswers = [firstAns,secondAns,thirdAns,fourthAns];
+
+    allOption.forEach((option,index)=>{
+        option.addEventListener('click',()=>{
+            toggleOption(option,index,selectedAnswers);
+            
+        })
     })
 
-    secondOption.addEventListener('click',()=>{
-        if(secondOption.style.backgroundColor === 'blue'){
-            secondOption.style.backgroundColor = 'aliceblue'
-            secondAns = !secondAns;
-        }else{
-            secondOption.style.backgroundColor = 'blue';
-            secondAns = !secondAns;
-        }
-    })
+}
 
-    thirdOption.addEventListener('click',()=>{
-        if(thirdOption.style.backgroundColor === 'blue'){
-            thirdOption.style.backgroundColor = 'aliceblue'
-            thirdAns = !thirdAns;
-        }else{
-            thirdOption.style.backgroundColor = 'blue';
-            thirdAns = !thirdAns;
-        }
-    })
-
-    fourthOption.addEventListener('click',()=>{
-        if(fourthOption.style.backgroundColor === 'blue'){
-            fourthOption.style.backgroundColor = 'aliceblue'
-            fourthAns = !fourthAns;
-        }else{
-            fourthOption.style.backgroundColor = 'blue';
-            fourthAns = !fourthAns;
-        }
-    })
-    
-    
-    
-    
-    
+const toggleOption = (option,index,selectedAnswers) => {
+    selectedAnswers[index] = !selectedAnswers[index];
+    if(selectedAnswers[index]){
+        option.style.backgroundColor = 'aliceblue';
+    }else{
+        option.style.backgroundColor = 'blue';
+    }
+    firstAns = selectedAnswers[0];
+    secondAns = selectedAnswers[1];
+    thirdAns = selectedAnswers[2];
+    fourthAns = selectedAnswers[3];
+    checkAnswer();
 }
 
 const data = async ()=>{
@@ -134,7 +113,7 @@ const data = async ()=>{
         let correctAns = res[0].correct_answer;
         
         assignValues(question,answers,correctAns);
-        
+        click();
 
     }catch(e){
         console.log("Unable to fetch the data due to some unfotunate circumstances" , e);
@@ -142,9 +121,7 @@ const data = async ()=>{
     
 
 }
-document.addEventListener('DOMContentLoaded', () => {
-    click();
-});
+
 
 
 data();
