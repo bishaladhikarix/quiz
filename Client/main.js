@@ -49,7 +49,7 @@ const assignAnswers = (answers) => {
 };
 
 //Fetching data
-const data = async () => {
+const fetchData = async () => {
   try {
     const response = await fetch(URL);
     const res = await response.json();
@@ -61,10 +61,6 @@ const data = async () => {
     console.log(correctAnswer);
 
     assignValues(question, answers);
-    // checks what user selected
-    allOption.forEach((option, index) => {
-      option.addEventListener("click", () => getAnswer(index));
-    });
   } catch (e) {
     throw new Error(`Unable to fetch the data due to some unfotunate circumstances : ${e}`);
   }
@@ -106,23 +102,32 @@ function getAnswer(index) {
 
 //function to check the answer whether it is correct or incorrect;
 const checkAnswers = (correctAnswer) => {
-  const score = document.querySelector(".player-score");
-  const result = document.querySelector(".result");
   const userInput = [firstAns, secondAns, thirdAns, fourthAns];
   const answerIndex = Object.values(correctAnswer);
   const correctAnswerIndex = answerIndex.indexOf("true");
   const userInputIndex = userInput.indexOf(true);
 
-  if (correctAnswerIndex === userInputIndex) {
+  if (correctAnswerIndex === userInputIndex) return true;
+  else return false;
+};
+
+function updateResult(correctAnswer) {
+  const score = document.querySelector(".player-score");
+  const result = document.querySelector(".result");
+
+  if (checkAnswers(correctAnswer)) {
     scoreValue++;
     result.textContent = "Correct";
   } else result.textContent = "Incorrect";
 
   score.innerText = `Score: ${scoreValue}`;
-  setTimeout(() => {
-    data();
-  }, 1000);
-};
+}
 
-submitBtn.addEventListener("click", () => checkAnswers(correctAnswer));
-window.addEventListener("load", data);
+allOption.forEach((option, index) => option.addEventListener("click", () => getAnswer(index)));
+window.addEventListener("load", fetchData);
+submitBtn.addEventListener("click", () => {
+  updateResult(correctAnswer);
+  setTimeout(() => {
+    fetchData();
+  }, 1000);
+});
