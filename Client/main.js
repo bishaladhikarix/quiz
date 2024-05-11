@@ -31,10 +31,10 @@ const assignQuestion = (question) => {
 
 //assign option of answers to ans-visual container
 const assignAnswers = (answers) => {
-  let optionA = answers.answer_a;
-  let optionB = answers.answer_b;
-  let optionC = answers.answer_c;
-  let optionD = answers.answer_d;
+  const optionA = answers.answer_a;
+  const optionB = answers.answer_b;
+  const optionC = answers.answer_c;
+  const optionD = answers.answer_d;
 
   //html elemnet for answer-optoins
   const optionOne = document.querySelector(".one");
@@ -51,12 +51,13 @@ const assignAnswers = (answers) => {
 //Fetching data
 const data = async () => {
   try {
-    let response = await fetch(URL);
-    let res = await response.json();
-    let question = res[0].question;
-    let answers = res[0].answers;
+    const response = await fetch(URL);
+    const res = await response.json();
+    const question = res[0].question;
+    const answers = res[0].answers;
     correctAnswer = res[0].correct_answers;
 
+    // Logged answer to check if score increases or not when answer is correct.
     console.log(correctAnswer);
 
     assignValues(question, answers);
@@ -65,22 +66,14 @@ const data = async () => {
       option.addEventListener("click", () => getAnswer(index));
     });
   } catch (e) {
-    console.log("Unable to fetch the data due to some unfotunate circumstances", e);
+    throw new Error(`Unable to fetch the data due to some unfotunate circumstances : ${e}`);
   }
 };
 
 //Toogles background color to indicate which options are selected
-//and toogles the boolean varaible if it is selected.
-function getAnswer(index) {
-  //Answer checking varaibles
-  firstAns = false;
-  secondAns = false;
-  thirdAns = false;
-  fourthAns = false;
-  const selectedAnswers = [firstAns, secondAns, thirdAns, fourthAns];
-  selectedAnswers[index] = !selectedAnswers[index];
-  allOption.forEach((option, i) => {
-    const isSelected = index === i;
+function dispalySelectedOption(selectedIndex) {
+  allOption.forEach((option, index) => {
+    const isSelected = selectedIndex === index;
     const style = isSelected ? "aliceblue" : "blue";
     option.style.backgroundColor = style;
     option.addEventListener("mouseover", () => {
@@ -92,10 +85,23 @@ function getAnswer(index) {
       option.setAttribute("style", `background-color:${style}`);
     });
   });
+}
+
+// Toogles the boolean varaible if it is selected.
+function getAnswer(index) {
+  //Answer checking varaibles
+  // used it here so that only one option will be selected and others will be set to false
+  firstAns = false;
+  secondAns = false;
+  thirdAns = false;
+  fourthAns = false;
+  const selectedAnswers = [firstAns, secondAns, thirdAns, fourthAns];
+  selectedAnswers[index] = !selectedAnswers[index];
   firstAns = selectedAnswers[0];
   secondAns = selectedAnswers[1];
   thirdAns = selectedAnswers[2];
   fourthAns = selectedAnswers[3];
+  dispalySelectedOption(index);
 }
 
 //function to check the answer whether it is correct or incorrect;
