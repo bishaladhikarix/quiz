@@ -84,20 +84,24 @@ function dispalySelectedOption(selectedIndex) {
 }
 
 // Toogles the boolean varaible if it is selected.
-function getAnswer(index) {
+function toggleSelectedAnswer(index) {
   //Answer checking varaibles
-  // used it here so that only one option will be selected and others will be set to false
+  // used it here so that only one option will be selected and others will be set to false everytime this function runs
   firstAns = false;
   secondAns = false;
   thirdAns = false;
   fourthAns = false;
   const selectedAnswers = [firstAns, secondAns, thirdAns, fourthAns];
   selectedAnswers[index] = !selectedAnswers[index];
+  updateAnswer(selectedAnswers);
+  dispalySelectedOption(index);
+}
+
+function updateAnswer(selectedAnswers) {
   firstAns = selectedAnswers[0];
   secondAns = selectedAnswers[1];
   thirdAns = selectedAnswers[2];
   fourthAns = selectedAnswers[3];
-  dispalySelectedOption(index);
 }
 
 //function to check the answer whether it is correct or incorrect;
@@ -123,7 +127,7 @@ function updateResult(correctAnswer) {
   score.innerText = `Score: ${scoreValue}`;
 }
 
-allOption.forEach((option, index) => option.addEventListener("click", () => getAnswer(index)));
+allOption.forEach((option, index) => option.addEventListener("click", () => toggleSelectedAnswer(index)));
 window.addEventListener("load", fetchData);
 submitBtn.addEventListener("click", () => {
   updateResult(correctAnswer);
