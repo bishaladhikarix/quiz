@@ -1,170 +1,122 @@
 //frontend varaibles
-const questionContainer = document.querySelector('.question');
-const ansContainer = document.querySelector('.answer');
-const submitBtn = document.querySelector('.submit');
+const questionContainer = document.querySelector(".question");
+const ansContainer = document.querySelector(".answer");
+const submitBtn = document.querySelector(".submit");
+const allOption = document.querySelectorAll("#opt");
 
 //Api's shits
-const apiKey = 'FVqReQUHGBzu36QQdfmzINPK9WwXCmgN9ISRpJM3';
+const apiKey = "FVqReQUHGBzu36QQdfmzINPK9WwXCmgN9ISRpJM3";
 const URL = `https://quizapi.io/api/v1/questions?apiKey=${apiKey}&limit=1`;
-let catagory = '';
-let difficulty = '';
+let catagory = "";
+let difficulty = "";
 
 //Answer checking varaibles
 let firstAns = false;
 let secondAns = false;
 let thirdAns = false;
 let fourthAns = false;
-
-
-//Fetching data
-const data = async ()=>{
-    
-
-    try{
-        let response = await(fetch(URL));
-        let res = await response.json();
-        let question = res[0].question;
-        let answers = res[0].answers;
-        let correctAns = res[0].correct_answers;
-        
-        assignValues(question,answers,correctAns);
-        optionClick();//checks what user selected
-
-    }catch(e){
-        console.log("Unable to fetch the data due to some unfotunate circumstances" , e);
-    }
-    
-
-}
+let correctAnswer;
+let scoreValue = 0;
 
 //takes responsibility for passing the data to related functions;
-const assignValues = (question,answers,correctAns)=>{
-    assignQuestion(question);
-    assignAnswers(answers);
-    submitClick(()=> checkAnswers(correctAns));
-    
-}
+const assignValues = (question, answers) => {
+  assignQuestion(question);
+  assignAnswers(answers);
+};
 
 //assign question to questoin field
-const assignQuestion = (question)=>{
-    questionContainer.innerText = question;
-}
+const assignQuestion = (question) => {
+  questionContainer.innerText = question;
+};
 
 //assign option of answers to ans-visual container
-const assignAnswers = (answers)=>{
-    let optionA = answers.answer_a;
-    let optionB = answers.answer_b;
-    let optionC = answers.answer_c;
-    let optionD = answers.answer_d;
-    
-    //html elemnet for answer-optoins
-    const optionOne = document.querySelector('.one');
-    const optionTwo = document.querySelector('.two');
-    const optionThree = document.querySelector('.three');
-    const optionFour = document.querySelector('.four');
+const assignAnswers = (answers) => {
+  let optionA = answers.answer_a;
+  let optionB = answers.answer_b;
+  let optionC = answers.answer_c;
+  let optionD = answers.answer_d;
 
-    optionOne.innerText = 'A) ' + optionA;
-    optionTwo.innerText = 'B) ' + optionB;
-    optionThree.innerText = 'C) ' + optionC;
-    optionFour.innerText = 'D) ' + optionD;
-}
+  //html elemnet for answer-optoins
+  const optionOne = document.querySelector(".one");
+  const optionTwo = document.querySelector(".two");
+  const optionThree = document.querySelector(".three");
+  const optionFour = document.querySelector(".four");
 
+  optionOne.innerText = "A) " + optionA;
+  optionTwo.innerText = "B) " + optionB;
+  optionThree.innerText = "C) " + optionC;
+  optionFour.innerText = "D) " + optionD;
+};
 
-//pass the individual  option available to the toogle functoin; 
-const optionClick = () => {
-    // const firstOption = document.querySelector('.option-a');
-    // const secondOption = document.querySelector('.option-b');
-    // const thirdOption = document.querySelector('.option-c');
-    // const fourthOption = document.querySelector('.option-d');
+//Fetching data
+const data = async () => {
+  try {
+    let response = await fetch(URL);
+    let res = await response.json();
+    let question = res[0].question;
+    let answers = res[0].answers;
+    correctAnswer = res[0].correct_answers;
 
-    // const allOption = [firstOption,secondOption,thirdOption,fourthOption];
-    const allOption = document.querySelectorAll('#opt');
-    const selectedAnswers = [firstAns,secondAns,thirdAns,fourthAns];
+    console.log(correctAnswer);
 
-    allOption.forEach((option,index)=>{
-        option.addEventListener('click',()=>{
-            toggleOption(option,index,selectedAnswers);
-            
-        })
-    })
-}
+    assignValues(question, answers);
+    // checks what user selected
+    allOption.forEach((option, index) => {
+      option.addEventListener("click", () => getAnswer(index));
+    });
+  } catch (e) {
+    console.log("Unable to fetch the data due to some unfotunate circumstances", e);
+  }
+};
+
 //Toogles background color to indicate which options are selected
 //and toogles the boolean varaible if it is selected.
-const toggleOption = (option,index,selectedAnswers) => {
-    selectedAnswers[index] = !selectedAnswers[index];
-    if(selectedAnswers[index]){
-        option.style.backgroundColor = 'aliceblue';
-    }else{
-        option.style.backgroundColor = 'blue';
-    }
-    firstAns = selectedAnswers[0];
-    secondAns = selectedAnswers[1];
-    thirdAns = selectedAnswers[2];
-    fourthAns = selectedAnswers[3];
-   
+function getAnswer(index) {
+  //Answer checking varaibles
+  firstAns = false;
+  secondAns = false;
+  thirdAns = false;
+  fourthAns = false;
+  const selectedAnswers = [firstAns, secondAns, thirdAns, fourthAns];
+  selectedAnswers[index] = !selectedAnswers[index];
+  allOption.forEach((option, i) => {
+    const isSelected = index === i;
+    const style = isSelected ? "aliceblue" : "blue";
+    option.style.backgroundColor = style;
+    option.addEventListener("mouseover", () => {
+      option.classList.add("hoverEffect");
+      option.removeAttribute("style");
+    });
+    option.addEventListener("mouseout", () => {
+      option.classList.remove("hoverEffect");
+      option.setAttribute("style", `background-color:${style}`);
+    });
+  });
+  firstAns = selectedAnswers[0];
+  secondAns = selectedAnswers[1];
+  thirdAns = selectedAnswers[2];
+  fourthAns = selectedAnswers[3];
 }
 
 //function to check the answer whether it is correct or incorrect;
-const checkAnswers = (correctAns)=>{
-    // const score = document.querySelector('.player-score');
-    // const result = document.querySelector('.result');
-    // const userInput = [firstAns,secondAns,thirdAns,fourthAns];
-    // const answers = [ans.answer_a_correct , ans.answer_b_correct , ans.answer_c_correct , ans.answer_d_correct];
+const checkAnswers = (correctAnswer) => {
+  const score = document.querySelector(".player-score");
+  const result = document.querySelector(".result");
+  const userInput = [firstAns, secondAns, thirdAns, fourthAns];
+  const answerIndex = Object.values(correctAnswer);
+  const correctAnswerIndex = answerIndex.indexOf("true");
+  const userInputIndex = userInput.indexOf(true);
 
-    // let scoreValue = 0;
-    // score.innerText = 'Score: '+ scoreValue;
+  if (correctAnswerIndex === userInputIndex) {
+    scoreValue++;
+    result.textContent = "Correct";
+  } else result.textContent = "Incorrect";
 
-    // let checkUsr = 0; // get increment according to number of userSelected optoins;
-    // let checkAns = 0;// get increment according to number of correct answer;
-
-    // userInput.forEach((input)=>{      
-    //          if(input === true){
-    //             checkUsr++;
-    //         }
-    // })
-    // answers.forEach((ans)=>{
-    //     if(ans === true){
-    //         checkAns++;
-    //     }
-    // })
-
-    // if(checkUsr === checkAns){
-    //     scoreValue++;
-    //     result.innerText = "Correct";
-        
-    // }else{
-    //     result.innerText = "Incorrect";
-        
-    // }
-    const score = document.querySelector('.player-score');
-    const result = document.querySelector('.result');
-    const userInput = [firstAns, secondAns, thirdAns, fourthAns];
-    const answers = [correctAns.answer_a_correct, correctAns.answer_b_correct, correctAns.answer_c_correct, correctAns.answer_d_correct];
-
-    let scoreValue = 0;
-
-    userInput.forEach((input, index) => {
-        if (input === answers[index]) {
-            scoreValue++;
-        }
-    });
-
-    score.innerText = 'Score: ' + scoreValue;
-    result.innerText = (scoreValue === 4) ? "Correct" : "Incorrect";
+  score.innerText = `Score: ${scoreValue}`;
+  setTimeout(() => {
     data();
-}
+  }, 1000);
+};
 
-
-const submitClick = (something)=>{
-    submitBtn.addEventListener('click',something);
-}
-
-
-data();
-
-
-
-
-
-
-
+submitBtn.addEventListener("click", () => checkAnswers(correctAnswer));
+window.addEventListener("load", data);
